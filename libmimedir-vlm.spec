@@ -6,13 +6,14 @@ Name:		libmimedir-vlm
 Version:	0.3
 Release:	1
 License:	BSD
-Group:		Development/Libraries
+Group:		Libraries
 Source0:	http://dl.sourceforge.net/synce/libmimedir-0.3.tar.gz
 # Source0-md5:	bb967f6f8931d4efdc34d3729b7f819b
-Patch0:		libmimedir-destdir.patch
+Patch0:		%{name}-shared.patch
 URL:		http://libmimedir.sourceforge.net/
 BuildRequires:	bison
 BuildRequires:	flex
+BuildRequires:	libtool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -22,6 +23,30 @@ Walkin.
 %description -l pl
 Implementacja RFC 2425 (MIME Directory Profile). Autorem tej wersji
 jest Lev Walkin.
+
+%package devel
+Summary:	Header file for libmimedir library
+Summary(pl):	Plik nag³ówkowy biblioteki libmimedir
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description devel
+Header file for libmimedir library.
+
+%description devel -l pl
+Plik nag³ówkowy biblioteki libmimedir.
+
+%package static
+Summary:	Static libmimedir library
+Summary(pl):	Statyczna biblioteka libmimedir
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static libmimedir library.
+
+%description static -l pl
+Statyczna biblioteka libmimedir.
 
 %prep
 %setup -q -n libmimedir-%{version}
@@ -33,18 +58,27 @@ jest Lev Walkin.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-mv -f $RPM_BUILD_ROOT%{_libdir}/libmimedir{,-vlm}.a
-
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
 
 %files 
 %defattr(644,root,root,755)
 %doc COPYING ChangeLog README
-%attr(755,root,root) %{_libdir}/libmimedir-vlm.a
+%attr(755,root,root) %{_libdir}/libmimedir-vlm.so.*.*.*
+
+%files devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libmimedir-vlm.so
+%{_libdir}/libmimedir-vlm.la
 %{_includedir}/libmimedir.h
+
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libmimedir-vlm.a
