@@ -38,11 +38,13 @@ install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+mv -f $RPM_BUILD_ROOT%{_libdir}/libmimedir{,-vlm}.a
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files 
 %defattr(644,root,root,755)
 %doc COPYING ChangeLog README
-%attr(755,root,root) %{_libdir}/libmimedir.a
+%attr(755,root,root) %{_libdir}/libmimedir-vlm.a
 %{_includedir}/libmimedir.h
