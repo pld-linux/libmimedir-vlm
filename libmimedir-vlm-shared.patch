@@ -1,0 +1,55 @@
+--- libmimedir-0.3/Makefile.in.orig	2003-07-31 08:27:13.000000000 +0200
++++ libmimedir-0.3/Makefile.in	2004-12-26 01:34:03.502120544 +0100
+@@ -12,19 +12,19 @@
+ YACC= @YACC@
+ LEX= @LEX@
+ INSTALL= @INSTALL@
+-LIBS= -L./ -lmimedir
+-
+-OBJS= dirlex.o dirsynt.o parse.o get.o dup.o free.o memmem.o add.o count.o del.o
++LIBS= libmimedir-vlm.la
++LIBTOOL=libtool
++OBJS= dirlex.lo dirsynt.lo parse.lo get.lo dup.lo free.lo memmem.lo add.lo count.lo del.lo
+ 
+ TESTS = test
+ 
+-all: libmimedir.a $(TESTS)
++all: libmimedir-vlm.la $(TESTS)
+ 
+-libmimedir.a: ${OBJS}
+-	ar rc libmimedir.a ${OBJS}
++libmimedir-vlm.la: ${OBJS}
++	$(LIBTOOL) --mode=link $(CC) $(LDFLAGS) -o libmimedir-vlm.la $(OBJS) -rpath $(libdir)
+ 
+-test: test.o libmimedir.a
+-	${CC} ${CFLAGS} -o test test.o ${LIBS}
++test: test.o libmimedir-vlm.la
++	$(LIBTOOL) --mode=link ${CC} ${CFLAGS} -o test test.o ${LIBS}
+ 
+ dirsynt.c dirsynt.h: dirsynt.y
+ 	${YACC} -p_mdir_ -d dirsynt.y
+@@ -35,17 +35,21 @@
+ 	${LEX} -Cem -odirlex.c -P_mdir_ dirlex.l
+ 
+ .SUFFIXES:
+-.SUFFIXES: .c .o
++.SUFFIXES: .c .o .lo
+ 
+ .c.o:
+ 	${CC} ${CFLAGS} -o $@ -c $<
+ 
++.c.lo:
++	$(LIBTOOL) --mode=compile ${CC} ${CFLAGS} -o $@ -c $<
++
+ check: all
+ 	./test
+ 
+ install: all
+-	${INSTALL} -m 444 libmimedir.h ${includedir}
+-	${INSTALL} -m 444 libmimedir.a ${libdir}
++	$(INSTALL) -d $(DESTDIR)$(includedir) $(DESTDIR)$(libdir)
++	${INSTALL} -m 444 libmimedir.h ${DESTDIR}/${includedir}
++	$(LIBTOOL) --mode=install ${INSTALL} libmimedir-vlm.la ${DESTDIR}/${libdir}
+ 
+ clean:
+ 	rm -f *.o *.a *.core
