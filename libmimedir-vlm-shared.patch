@@ -1,14 +1,15 @@
---- libmimedir-0.3/Makefile.in.orig	2003-07-31 08:27:13.000000000 +0200
-+++ libmimedir-0.3/Makefile.in	2004-12-26 01:34:03.502120544 +0100
-@@ -12,19 +12,19 @@
+--- libmimedir-0.4/Makefile.in.orig	2005-03-04 07:35:50.000000000 +0100
++++ libmimedir-0.4/Makefile.in	2005-10-25 18:18:40.270936344 +0200
+@@ -12,21 +12,20 @@
  YACC= @YACC@
  LEX= @LEX@
  INSTALL= @INSTALL@
--LIBS= -L./ -lmimedir
--
--OBJS= dirlex.o dirsynt.o parse.o get.o dup.o free.o memmem.o add.o count.o del.o
-+LIBS= libmimedir-vlm.la
+-RANLIB= @RANLIB@
+-LIBS= -L. -lmimedir
 +LIBTOOL=libtool
++LIBS= libmimedir-vlm.la
+ 
+-OBJS= dirlex.o dirsynt.o parse.o get.o dup.o free.o memmem.o add.o count.o del.o
 +OBJS= dirlex.lo dirsynt.lo parse.lo get.lo dup.lo free.lo memmem.lo add.lo count.lo del.lo
  
  TESTS = test
@@ -18,6 +19,7 @@
  
 -libmimedir.a: ${OBJS}
 -	ar rc libmimedir.a ${OBJS}
+-	$(RANLIB) libmimedir.a
 +libmimedir-vlm.la: ${OBJS}
 +	$(LIBTOOL) --mode=link $(CC) $(LDFLAGS) -o libmimedir-vlm.la $(OBJS) -rpath $(libdir)
  
@@ -28,7 +30,7 @@
  
  dirsynt.c dirsynt.h: dirsynt.y
  	${YACC} -p_mdir_ -d dirsynt.y
-@@ -35,17 +35,21 @@
+@@ -37,17 +36,21 @@
  	${LEX} -Cem -odirlex.c -P_mdir_ dirlex.l
  
  .SUFFIXES:
