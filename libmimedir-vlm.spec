@@ -3,12 +3,12 @@
 Summary:	RFC 2425 implementation
 Summary(pl):	Implementacja RFC 2425
 Name:		libmimedir-vlm
-Version:	0.3
+Version:	0.4
 Release:	1
 License:	BSD
 Group:		Libraries
-Source0:	http://dl.sourceforge.net/synce/libmimedir-0.3.tar.gz
-# Source0-md5:	bb967f6f8931d4efdc34d3729b7f819b
+Source0:	http://dl.sourceforge.net/synce/libmimedir-%{version}.tar.gz
+# Source0-md5:	156e1eb69377d9ae9180a09e38148ec6
 Patch0:		%{name}-shared.patch
 URL:		http://libmimedir.sourceforge.net/
 BuildRequires:	bison
