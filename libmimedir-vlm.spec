@@ -1,7 +1,7 @@
 # NOTE: it's totally different than libmimedir used in gnome-pim
 #       (http://me.in-berlin.de/~jroger/gnome-pim/ up to 0.2.1 version)
 Summary:	RFC 2425 implementation
-Summary(pl):	Implementacja RFC 2425
+Summary(pl.UTF-8):   Implementacja RFC 2425
 Name:		libmimedir-vlm
 Version:	0.4
 Release:	1
@@ -20,32 +20,32 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Implementation of RFC 2425 (MIME Directory Profile) written by Lev
 Walkin.
 
-%description -l pl
+%description -l pl.UTF-8
 Implementacja RFC 2425 (MIME Directory Profile). Autorem tej wersji
 jest Lev Walkin.
 
 %package devel
 Summary:	Header file for libmimedir library
-Summary(pl):	Plik nag≥Ûwkowy biblioteki libmimedir
+Summary(pl.UTF-8):   Plik nag≈Ç√≥wkowy biblioteki libmimedir
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header file for libmimedir library.
 
-%description devel -l pl
-Plik nag≥Ûwkowy biblioteki libmimedir.
+%description devel -l pl.UTF-8
+Plik nag≈Ç√≥wkowy biblioteki libmimedir.
 
 %package static
 Summary:	Static libmimedir library
-Summary(pl):	Statyczna biblioteka libmimedir
+Summary(pl.UTF-8):   Statyczna biblioteka libmimedir
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static libmimedir library.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczna biblioteka libmimedir.
 
 %prep
