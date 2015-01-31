@@ -1,57 +1,47 @@
---- libmimedir-0.4/Makefile.in.orig	2005-03-04 07:35:50.000000000 +0100
-+++ libmimedir-0.4/Makefile.in	2005-10-25 18:18:40.270936344 +0200
-@@ -12,21 +12,20 @@
- YACC= @YACC@
- LEX= @LEX@
+--- libmimedir-0.5.1/Makefile.in.orig	2015-01-31 09:06:10.851265831 +0100
++++ libmimedir-0.5.1/Makefile.in	2015-01-31 09:49:19.547823861 +0100
+@@ -15,23 +15,23 @@
  INSTALL= @INSTALL@
--RANLIB= @RANLIB@
--LIBS= -L. -lmimedir
-+LIBTOOL=libtool
+ RANLIB= @RANLIB@
+ LIBTOOL= @LIBTOOL@
+-LIBS= -L. libmimedir.la
 +LIBS= libmimedir-vlm.la
  
--OBJS= dirlex.o dirsynt.o parse.o get.o dup.o free.o memmem.o add.o count.o del.o
-+OBJS= dirlex.lo dirsynt.lo parse.lo get.lo dup.lo free.lo memmem.lo add.lo count.lo del.lo
+ OBJS= dirlex.o dirsynt.o parse.o get.o dup.o free.o memmem.o add.o count.o del.o
+ LOBJS= dirlex.lo dirsynt.lo parse.lo get.lo dup.lo free.lo memmem.lo add.lo count.lo del.lo
  
  TESTS = test
  
--all: libmimedir.a $(TESTS)
+-all: libmimedir.a libmimedir.la $(TESTS)
 +all: libmimedir-vlm.la $(TESTS)
  
 -libmimedir.a: ${OBJS}
 -	ar rc libmimedir.a ${OBJS}
 -	$(RANLIB) libmimedir.a
-+libmimedir-vlm.la: ${OBJS}
-+	$(LIBTOOL) --mode=link $(CC) $(LDFLAGS) -o libmimedir-vlm.la $(OBJS) -rpath $(libdir)
++libmimedir-vlm.a: ${OBJS}
++	ar rc libmimedir-vlm.a ${OBJS}
++	$(RANLIB) libmimedir-vlm.a
  
--test: test.o libmimedir.a
--	${CC} ${CFLAGS} -o test test.o ${LIBS}
+-libmimedir.la: ${LOBJS}
+-	$(LIBTOOL) --mode=link ${CC} ${CFLAGS} ${LDFLAGS} -rpath ${libdir} -o libmimedir.la ${LOBJS}
++libmimedir-vlm.la: ${LOBJS}
++	$(LIBTOOL) --mode=link ${CC} ${CFLAGS} ${LDFLAGS} -rpath ${libdir} -o libmimedir-vlm.la ${LOBJS}
+ 
+-test: test.o libmimedir.la
 +test: test.o libmimedir-vlm.la
-+	$(LIBTOOL) --mode=link ${CC} ${CFLAGS} -o test test.o ${LIBS}
+ 	$(LIBTOOL) --mode=link ${CC} ${CFLAGS} ${LDFLAGS} -o test test.o ${LIBS}
  
  dirsynt.c dirsynt.h: dirsynt.y
- 	${YACC} -p_mdir_ -d dirsynt.y
-@@ -37,17 +36,21 @@
- 	${LEX} -Cem -odirlex.c -P_mdir_ dirlex.l
- 
- .SUFFIXES:
--.SUFFIXES: .c .o
-+.SUFFIXES: .c .o .lo
- 
- .c.o:
- 	${CC} ${CFLAGS} -o $@ -c $<
- 
-+.c.lo:
-+	$(LIBTOOL) --mode=compile ${CC} ${CFLAGS} -o $@ -c $<
-+
- check: all
+@@ -55,9 +55,9 @@
  	./test
  
  install: all
 -	${INSTALL} -m 444 libmimedir.h ${includedir}
 -	${INSTALL} -m 444 libmimedir.a ${libdir}
+-	$(LIBTOOL) --mode=install ${INSTALL} -c -m 444 libmimedir.la ${libdir}/libmimedir.la
 +	$(INSTALL) -d $(DESTDIR)$(includedir) $(DESTDIR)$(libdir)
-+	${INSTALL} -m 444 libmimedir.h ${DESTDIR}/${includedir}
-+	$(LIBTOOL) --mode=install ${INSTALL} libmimedir-vlm.la ${DESTDIR}/${libdir}
++	${INSTALL} libmimedir.h $(DESTDIR)${includedir}
++	$(LIBTOOL) --mode=install ${INSTALL} -c libmimedir-vlm.la $(DESTDIR)${libdir}/libmimedir-vlm.la
  
  clean:
- 	rm -f *.o *.a *.core
+ 	rm -f $(OBJS) $(LOBJS) test.o *.a *.la *.core
