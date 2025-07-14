@@ -49,7 +49,7 @@ Statyczna biblioteka libmimedir.
 
 %prep
 %setup -q -n libmimedir-%{version}
-%patch0 -p1
+%patch -P0 -p1
 
 %build
 %configure
